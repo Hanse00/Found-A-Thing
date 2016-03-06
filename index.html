@@ -15,12 +15,31 @@ limitations under the License.
 -->
 
 <!doctype html>
-<html>
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <title>Found-A-Thing</title>
+        <meta name="google-signin-scope" content="profile email">
+        <meta name="google-signin-client_id" content="1066776230803-rc9g94dl5amojtvf76egkd2b9f4oq0on.apps.googleusercontent.com">
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
     </head>
     <body>
         <h1>Found-A-Thing</h1>
+        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+		<a href="#" onclick="signOut();">Sign Out</a>
+        <script>
+			function onSignIn(googleUser) {
+				var profile = googleUser.getBasicProfile();
+				console.log("Google ID: " + profile.getId());
+				console.log("Google Name: " + profile.getName());
+			}
+
+			function signOut() {
+				var auth2 = gapi.auth2.getAuthInstance();
+				auth2.signOut().then(function () {
+					console.log("Google user logged out");
+				});
+			}
+        </script>
     </body>
 </html>
