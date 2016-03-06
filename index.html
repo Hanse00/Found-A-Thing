@@ -19,27 +19,36 @@ limitations under the License.
     <head>
         <meta charset="utf-8">
         <title>Found-A-Thing</title>
-        <meta name="google-signin-scope" content="profile email">
-        <meta name="google-signin-client_id" content="1066776230803-rc9g94dl5amojtvf76egkd2b9f4oq0on.apps.googleusercontent.com">
-        <script src="https://apis.google.com/js/platform.js" async defer></script>
-    </head>
-    <body>
-        <h1>Found-A-Thing</h1>
-        <div class="g-signin2" data-onsuccess="onSignIn"></div>
-		<a href="#" onclick="signOut();">Sign Out</a>
-        <script>
-			function onSignIn(googleUser) {
-				var profile = googleUser.getBasicProfile();
-				console.log("Google ID: " + profile.getId());
-				console.log("Google Name: " + profile.getName());
+        <script src="https://cdn.firebase.com/js/client/2.4.1/firebase.js"></script>
+		<script>
+			var firebase = new Firebase("https://found-a-thing.firebaseio.com");
+			firebase.onAuth(authCallback);
+
+			function signIn() {
+				console.log("Sign in");
+				firebase.authWithOAuthPopup("google", function(error, authData) {
+  					if (error) {
+    					console.log("Login Failed!", error);
+  					}
+				});
 			}
 
 			function signOut() {
-				var auth2 = gapi.auth2.getAuthInstance();
-				auth2.signOut().then(function () {
-					console.log("Google user logged out");
-				});
+				firebase.unauth();
+			}
+
+			function authCallback(authData) {
+				if (authData) {
+					console.log("User logged in: ", authData);
+				} else {
+					console.log("User logged out");
+				}
 			}
         </script>
+    </head>
+    <body>
+        <h1>Found-A-Thing</h1>
+        <a href="#" onclick="signIn();">Sign In</a>
+		<a href="#" onclick="signOut();">Sign Out</a>
     </body>
 </html>
